@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2971EF39-17AB-4E67-A867-F0F737279BFC}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>LiceuApp</RootNamespace>
+    <AssemblyName>LiceuApp</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataAdd.Designer.cs">
+      <DependentUpon>DataAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateMaterii.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateMaterii.Designer.cs">
+      <DependentUpon>UpdateMaterii.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateNote.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateNote.Designer.cs">
+      <DependentUpon>UpdateNote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateElevi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateElevi.Designer.cs">
+      <DependentUpon>UpdateElevi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateProfesori.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateProfesori.Designer.cs">
+      <DependentUpon>UpdateProfesori.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LiceuXDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LiceuXDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LiceuXDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LiceuXDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LiceuXDataSet2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LiceuXDataSet2.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LiceuXDataSet3.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LiceuXDataSet3.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LiceuXDataSet4.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LiceuXDataSet4.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LiceuXDataSetElevi.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LiceuXDataSetElevi.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataDisplay.Designer.cs">
+      <DependentUpon>DataDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DataDisplay.resx">
+      <DependentUpon>DataDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataAdd.resx">
+      <DependentUpon>DataAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateMaterii.resx">
+      <DependentUpon>UpdateMaterii.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateNote.resx">
+      <DependentUpon>UpdateNote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateElevi.resx">
+      <DependentUpon>UpdateElevi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateProfesori.resx">
+      <DependentUpon>UpdateProfesori.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="LiceuXDataSet.xsc">
+      <DependentUpon>LiceuXDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LiceuXDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LiceuXDataSet.xss">
+      <DependentUpon>LiceuXDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet1.xsc">
+      <DependentUpon>LiceuXDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LiceuXDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LiceuXDataSet1.xss">
+      <DependentUpon>LiceuXDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet2.xsc">
+      <DependentUpon>LiceuXDataSet2.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LiceuXDataSet2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LiceuXDataSet2.xss">
+      <DependentUpon>LiceuXDataSet2.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet3.xsc">
+      <DependentUpon>LiceuXDataSet3.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet3.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LiceuXDataSet3.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LiceuXDataSet3.xss">
+      <DependentUpon>LiceuXDataSet3.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet4.xsc">
+      <DependentUpon>LiceuXDataSet4.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSet4.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LiceuXDataSet4.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LiceuXDataSet4.xss">
+      <DependentUpon>LiceuXDataSet4.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSetElevi.xsc">
+      <DependentUpon>LiceuXDataSetElevi.xsd</DependentUpon>
+    </None>
+    <None Include="LiceuXDataSetElevi.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LiceuXDataSetElevi.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LiceuXDataSetElevi.xss">
+      <DependentUpon>LiceuXDataSetElevi.xsd</DependentUpon>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resorces\Pictures\Elevi\" />
+    <Folder Include="Resorces\Pictures\Profesori\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
