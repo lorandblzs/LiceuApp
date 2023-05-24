@@ -11,7 +11,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Net.WebRequestMethods;
+using System.Runtime.CompilerServices;
+using LiceuApp.Properties;
+using System.Security.Cryptography;
 
 namespace LiceuApp
 {
@@ -56,12 +61,18 @@ namespace LiceuApp
         public string numePNota { get; set; }
         public string prenumePNota { get; set; }
         #endregion
+
+        public string sourceFile { get; set; }
+        public string fileExt { get; set; }
         public DataDisplay()
         {
             InitializeComponent();
         }
+
+
         private void DataDisplay_Load(object sender, EventArgs e)
         {
+            
 
             // TODO: This line of code loads data into the 'liceuXDataSet4.tProfesori' table. You can move, or remove it, as needed.
             this.tProfesoriTableAdapter1.Fill(this.liceuXDataSet4.tProfesori);
@@ -84,20 +95,28 @@ namespace LiceuApp
             myDataAdapter.SelectCommand = cmd;
             DataTable dt = new DataTable();
             myDataAdapter.Fill(dt);
+
+          
+
             dataGridViewProfesori.DataSource = dt;
-            dataGridViewProfesori.Columns[0].Visible = false;
-            dataGridViewProfesori.Columns[1].HeaderText = "Nume";
-            dataGridViewProfesori.Columns[2].HeaderText = "Prenume";
-            dataGridViewProfesori.Columns[3].HeaderText = "Varsta";
-            dataGridViewProfesori.Columns[4].HeaderText = "Salar";
-            dataGridViewProfesori.Columns[5].Visible = false;
-            dataGridViewProfesori.Columns[6].Visible = false;
-            dataGridViewProfesori.Columns[7].HeaderText = "Materie";
-            dataGridViewProfesori.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewProfesori.Columns["ID"].Visible = false;
+            dataGridViewProfesori.Columns["nume"].HeaderText = "Nume";
+            dataGridViewProfesori.Columns["prenume"].HeaderText = "Prenume";
+            dataGridViewProfesori.Columns["Varsta"].HeaderText = "Vârstă";
+            dataGridViewProfesori.Columns["salar"].HeaderText = "Salar";
+            dataGridViewProfesori.Columns["pic_URL"].Visible = false;
+            dataGridViewProfesori.Columns["ID_materie"].Visible = false;
+            dataGridViewProfesori.Columns["ID1"].Visible = false;
+            dataGridViewProfesori.Columns["materie"].HeaderText = "Materie";
+
+
+
             dataGridViewElevi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewMaterii.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewNote.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewElevi.Columns[5].HeaderText = "Nume Tata";
+
+
 
             SqlCommand cmdNote = new SqlCommand("SELECT \r\n       N.ID,\r\n       E.nume, \r\n\t   E.prenume, \r\n\t   clasa, \r\n\t   nota, \r\n\t   M.materie,\r\n\t   N.ID_materie, \r\n\t   ID_profesor,\r\n\t   P.nume,\r\n\t   P.prenume\r\nFROM tElevi as E \r\nJOIN tNote as N on E.ID = N.ID_elev\r\nJOIN tMaterii as M on N.ID_materie = M.ID\r\nJOIN tProfesori as P on N.ID_profesor = P.ID", myDbConnection);
             SqlDataAdapter myDataAdapterNote = new SqlDataAdapter();
@@ -133,7 +152,9 @@ namespace LiceuApp
             dataGridViewMaterii.Columns["materie"].HeaderText = "Materie";
             dataGridViewMaterii.Columns["nume"].HeaderText = "Nume";
             dataGridViewMaterii.Columns["prenume"].HeaderText = "Prenume";
-            
+            dataGridViewMaterii.Columns["pic_URL"].Visible = false;
+
+
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -166,7 +187,6 @@ namespace LiceuApp
         {
             int currentTabPage;
             currentTabPage = tabDataView.SelectedIndex;
-         
             
             if (currentTabPage == 0)
             {
@@ -206,7 +226,7 @@ namespace LiceuApp
 
         }
 
-        //gets data from Profesori grid view
+      
         private void dataGridViewProfesori_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowID = e.RowIndex;
@@ -217,6 +237,17 @@ namespace LiceuApp
             varstaProf = dataGridViewProfesori.Rows[rowID].Cells[3].Value.ToString();
             salarProf = dataGridViewProfesori.Rows[rowID].Cells[4].Value.ToString();
             idMatProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[5].Value.ToString());
+
+            var imgURL = dataGridViewProfesori.Rows[rowID].Cells[6].Value.ToString();
+            if (string.IsNullOrEmpty(imgURL))
+            {
+                imgURL = @"D:\x Projects\WebApp\LiceuApp\LiceuApp\Resorces\Pictures\def\user.png";
+                picBoxProfesor.ImageLocation = imgURL;
+            } 
+            else
+            {
+                picBoxProfesor.ImageLocation = imgURL;
+            }
         }
 
         private void dataGridViewProfesori_SelectionChanged(object sender, EventArgs e)
@@ -264,7 +295,78 @@ namespace LiceuApp
             numePNota = dataGridViewNote.Rows[rowID].Cells[8].Value.ToString();
             prenumePNota = dataGridViewNote.Rows[rowID].Cells[9].Value.ToString();
 
-
     }
+
+        private void btnSelecPic_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdProfPic = new OpenFileDialog();
+            ofdProfPic.Title = "Selectati poza";
+            ofdProfPic.InitialDirectory = @"C:\";
+            ofdProfPic.Filter = "Image Files|*.jpg;*.jpeg;*.png;";
+            ofdProfPic.Multiselect = false;
+            if (ofdProfPic.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = ofdProfPic.FileName;
+                FileInfo fi = new FileInfo(filePath);
+                string extn = fi.Extension;
+                fileExt = extn;
+
+                sourceFile = filePath;
+                label1.Text = filePath;
+                picBoxProfesor.Image = new Bitmap(filePath);
+            }
+        }
+
+        private void btnSavePic_Click(object sender, EventArgs e)
+        {
+            if (idProf == 0) {
+
+                MessageBox.Show("Nu ati selectat profesorul!");
+
+            } 
+            if (sourceFile == string.Empty ) {
+
+                MessageBox.Show("Nu ati selectat poza!");
+
+            } 
+            else
+            {
+                string fileName = sourceFile.ToString();
+                string destFileName = Path.Combine(@"D:\x Projects\WebApp\LiceuApp\LiceuApp\Resorces\Pictures\Profesori\" + "ID_" + idProf + "_" + numeProf + prenumeProf + fileExt);
+
+                if (System.IO.File.Exists(destFileName))
+                {
+                    System.IO.File.Delete(destFileName);
+                    System.IO.File.Copy(fileName, destFileName);
+                }
+                else
+                {
+                    System.IO.File.Copy(fileName, destFileName);
+                }
+
+                SqlConnection myDbConnection = new SqlConnection();
+                myDbConnection.ConnectionString = "Data Source=DESKTOP-99A38O7\\SQLEXPRESS;Initial Catalog=LiceuX;Integrated Security=True;";
+
+                SqlCommand myInsert = new SqlCommand();
+                myInsert.Connection = myDbConnection;
+                myInsert.CommandText = "UPDATE tProfesori SET pic_URL = '" + destFileName.ToString() + "' WHERE ID = " + idProf;
+
+                try
+                {
+                    myDbConnection.Open();
+                    myInsert.ExecuteNonQuery();
+                    myDbConnection.Close();
+                    MessageBox.Show("Poza a fost salvata!");
+
+                    DataDisplay dataDisplayForm = new DataDisplay();
+                    this.Close();
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            
+        }
     }
 }

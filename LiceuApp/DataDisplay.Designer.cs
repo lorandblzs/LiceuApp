@@ -29,9 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataDisplay));
             this.tabDataView = new System.Windows.Forms.TabControl();
             this.tabProfesori = new System.Windows.Forms.TabPage();
+            this.picBoxProfesor = new System.Windows.Forms.PictureBox();
             this.dataGridViewProfesori = new System.Windows.Forms.DataGridView();
             this.tabElevi = new System.Windows.Forms.TabPage();
             this.dataGridViewElevi = new System.Windows.Forms.DataGridView();
@@ -71,8 +73,12 @@
             this.tProfesoriTableAdapter1 = new LiceuApp.LiceuXDataSet4TableAdapters.tProfesoriTableAdapter();
             this.btnModifica = new System.Windows.Forms.Button();
             this.btnSterge = new System.Windows.Forms.Button();
+            this.btnSelecPic = new System.Windows.Forms.Button();
+            this.btnSavePic = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabDataView.SuspendLayout();
             this.tabProfesori.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxProfesor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfesori)).BeginInit();
             this.tabElevi.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewElevi)).BeginInit();
@@ -107,7 +113,7 @@
             this.tabDataView.Location = new System.Drawing.Point(0, 43);
             this.tabDataView.Name = "tabDataView";
             this.tabDataView.SelectedIndex = 0;
-            this.tabDataView.Size = new System.Drawing.Size(1057, 533);
+            this.tabDataView.Size = new System.Drawing.Size(1050, 533);
             this.tabDataView.TabIndex = 0;
             this.tabDataView.TabIndexChanged += new System.EventHandler(this.tabDataView_TabIndexChanged);
             this.tabDataView.Click += new System.EventHandler(this.tabDataView_Click_1);
@@ -115,14 +121,31 @@
             // 
             // tabProfesori
             // 
+            this.tabProfesori.Controls.Add(this.btnSavePic);
+            this.tabProfesori.Controls.Add(this.btnSelecPic);
+            this.tabProfesori.Controls.Add(this.picBoxProfesor);
             this.tabProfesori.Controls.Add(this.dataGridViewProfesori);
             this.tabProfesori.Location = new System.Drawing.Point(4, 22);
             this.tabProfesori.Name = "tabProfesori";
             this.tabProfesori.Padding = new System.Windows.Forms.Padding(3);
-            this.tabProfesori.Size = new System.Drawing.Size(1049, 507);
+            this.tabProfesori.Size = new System.Drawing.Size(1042, 507);
             this.tabProfesori.TabIndex = 0;
             this.tabProfesori.Text = "Profesori";
             this.tabProfesori.UseVisualStyleBackColor = true;
+            // 
+            // picBoxProfesor
+            // 
+            this.picBoxProfesor.BackColor = System.Drawing.Color.LightGray;
+            this.picBoxProfesor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picBoxProfesor.ErrorImage = global::LiceuApp.Properties.Resources.file;
+            this.picBoxProfesor.Image = global::LiceuApp.Properties.Resources.user;
+            this.picBoxProfesor.InitialImage = null;
+            this.picBoxProfesor.Location = new System.Drawing.Point(840, 53);
+            this.picBoxProfesor.Name = "picBoxProfesor";
+            this.picBoxProfesor.Size = new System.Drawing.Size(157, 205);
+            this.picBoxProfesor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picBoxProfesor.TabIndex = 1;
+            this.picBoxProfesor.TabStop = false;
             // 
             // dataGridViewProfesori
             // 
@@ -131,12 +154,22 @@
             this.dataGridViewProfesori.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewProfesori.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewProfesori.BackgroundColor = System.Drawing.Color.LightGray;
             this.dataGridViewProfesori.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewProfesori.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewProfesori.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewProfesori.Name = "dataGridViewProfesori";
             this.dataGridViewProfesori.ReadOnly = true;
             this.dataGridViewProfesori.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewProfesori.Size = new System.Drawing.Size(1043, 501);
+            this.dataGridViewProfesori.Size = new System.Drawing.Size(772, 501);
             this.dataGridViewProfesori.TabIndex = 0;
             this.dataGridViewProfesori.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewProfesori_CellClick);
             this.dataGridViewProfesori.SelectionChanged += new System.EventHandler(this.dataGridViewProfesori_SelectionChanged);
@@ -147,7 +180,7 @@
             this.tabElevi.Location = new System.Drawing.Point(4, 22);
             this.tabElevi.Name = "tabElevi";
             this.tabElevi.Padding = new System.Windows.Forms.Padding(3);
-            this.tabElevi.Size = new System.Drawing.Size(1049, 507);
+            this.tabElevi.Size = new System.Drawing.Size(1042, 507);
             this.tabElevi.TabIndex = 1;
             this.tabElevi.Text = "Elevi";
             this.tabElevi.UseVisualStyleBackColor = true;
@@ -157,6 +190,7 @@
             this.dataGridViewElevi.AllowUserToAddRows = false;
             this.dataGridViewElevi.AllowUserToDeleteRows = false;
             this.dataGridViewElevi.AutoGenerateColumns = false;
+            this.dataGridViewElevi.BackgroundColor = System.Drawing.Color.LightGray;
             this.dataGridViewElevi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewElevi.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.iDDataGridViewTextBoxColumn,
@@ -170,11 +204,10 @@
             this.telefon2DataGridViewTextBoxColumn,
             this.clasaDataGridViewTextBoxColumn});
             this.dataGridViewElevi.DataSource = this.tEleviBindingSource1;
-            this.dataGridViewElevi.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewElevi.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewElevi.Name = "dataGridViewElevi";
             this.dataGridViewElevi.ReadOnly = true;
-            this.dataGridViewElevi.Size = new System.Drawing.Size(1043, 501);
+            this.dataGridViewElevi.Size = new System.Drawing.Size(786, 501);
             this.dataGridViewElevi.TabIndex = 0;
             this.dataGridViewElevi.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewElevi_CellClick);
             // 
@@ -428,11 +461,41 @@
             this.btnSterge.Text = "Sterge";
             this.btnSterge.UseVisualStyleBackColor = true;
             // 
+            // btnSelecPic
+            // 
+            this.btnSelecPic.Location = new System.Drawing.Point(841, 274);
+            this.btnSelecPic.Name = "btnSelecPic";
+            this.btnSelecPic.Size = new System.Drawing.Size(75, 23);
+            this.btnSelecPic.TabIndex = 2;
+            this.btnSelecPic.Text = "Browse";
+            this.btnSelecPic.UseVisualStyleBackColor = true;
+            this.btnSelecPic.Click += new System.EventHandler(this.btnSelecPic_Click);
+            // 
+            // btnSavePic
+            // 
+            this.btnSavePic.Location = new System.Drawing.Point(922, 274);
+            this.btnSavePic.Name = "btnSavePic";
+            this.btnSavePic.Size = new System.Drawing.Size(75, 23);
+            this.btnSavePic.TabIndex = 3;
+            this.btnSavePic.Text = "Salvează";
+            this.btnSavePic.UseVisualStyleBackColor = true;
+            this.btnSavePic.Click += new System.EventHandler(this.btnSavePic_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(92, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "label1";
+            // 
             // DataDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1057, 577);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnSterge);
             this.Controls.Add(this.btnModifica);
             this.Controls.Add(this.btnExit);
@@ -447,6 +510,7 @@
             this.Load += new System.EventHandler(this.DataDisplay_Load);
             this.tabDataView.ResumeLayout(false);
             this.tabProfesori.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxProfesor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfesori)).EndInit();
             this.tabElevi.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewElevi)).EndInit();
@@ -467,6 +531,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.liceuXDataSet1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tEleviBindingSource)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -513,5 +578,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn clasaDataGridViewTextBoxColumn;
         private System.Windows.Forms.Button btnModifica;
         private System.Windows.Forms.Button btnSterge;
+        private System.Windows.Forms.PictureBox picBoxProfesor;
+        private System.Windows.Forms.Button btnSavePic;
+        private System.Windows.Forms.Button btnSelecPic;
+        private System.Windows.Forms.Label label1;
     }
 }

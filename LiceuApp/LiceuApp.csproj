@@ -149,6 +149,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="LiceuXDataSet.xsc">
       <DependentUpon>LiceuXDataSet.xsd</DependentUpon>
@@ -228,6 +229,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resorces\Pictures\def\file.png" />
+    <Content Include="Resorces\Pictures\def\user.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resorces\Pictures\Elevi\" />
