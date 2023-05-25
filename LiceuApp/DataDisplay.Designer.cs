@@ -33,6 +33,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataDisplay));
             this.tabDataView = new System.Windows.Forms.TabControl();
             this.tabProfesori = new System.Windows.Forms.TabPage();
+            this.btnSavePic = new System.Windows.Forms.Button();
+            this.btnSelecPic = new System.Windows.Forms.Button();
             this.picBoxProfesor = new System.Windows.Forms.PictureBox();
             this.dataGridViewProfesori = new System.Windows.Forms.DataGridView();
             this.tabElevi = new System.Windows.Forms.TabPage();
@@ -73,9 +75,6 @@
             this.tProfesoriTableAdapter1 = new LiceuApp.LiceuXDataSet4TableAdapters.tProfesoriTableAdapter();
             this.btnModifica = new System.Windows.Forms.Button();
             this.btnSterge = new System.Windows.Forms.Button();
-            this.btnSelecPic = new System.Windows.Forms.Button();
-            this.btnSavePic = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabDataView.SuspendLayout();
             this.tabProfesori.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxProfesor)).BeginInit();
@@ -133,6 +132,26 @@
             this.tabProfesori.Text = "Profesori";
             this.tabProfesori.UseVisualStyleBackColor = true;
             // 
+            // btnSavePic
+            // 
+            this.btnSavePic.Location = new System.Drawing.Point(922, 274);
+            this.btnSavePic.Name = "btnSavePic";
+            this.btnSavePic.Size = new System.Drawing.Size(75, 23);
+            this.btnSavePic.TabIndex = 3;
+            this.btnSavePic.Text = "Salvează";
+            this.btnSavePic.UseVisualStyleBackColor = true;
+            this.btnSavePic.Click += new System.EventHandler(this.btnSavePic_Click);
+            // 
+            // btnSelecPic
+            // 
+            this.btnSelecPic.Location = new System.Drawing.Point(841, 274);
+            this.btnSelecPic.Name = "btnSelecPic";
+            this.btnSelecPic.Size = new System.Drawing.Size(75, 23);
+            this.btnSelecPic.TabIndex = 2;
+            this.btnSelecPic.Text = "Browse";
+            this.btnSelecPic.UseVisualStyleBackColor = true;
+            this.btnSelecPic.Click += new System.EventHandler(this.btnSelecPic_Click);
+            // 
             // picBoxProfesor
             // 
             this.picBoxProfesor.BackColor = System.Drawing.Color.LightGray;
@@ -168,6 +187,7 @@
             this.dataGridViewProfesori.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewProfesori.Name = "dataGridViewProfesori";
             this.dataGridViewProfesori.ReadOnly = true;
+            this.dataGridViewProfesori.RowHeadersVisible = false;
             this.dataGridViewProfesori.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewProfesori.Size = new System.Drawing.Size(772, 501);
             this.dataGridViewProfesori.TabIndex = 0;
@@ -207,6 +227,8 @@
             this.dataGridViewElevi.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewElevi.Name = "dataGridViewElevi";
             this.dataGridViewElevi.ReadOnly = true;
+            this.dataGridViewElevi.RowHeadersVisible = false;
+            this.dataGridViewElevi.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewElevi.Size = new System.Drawing.Size(786, 501);
             this.dataGridViewElevi.TabIndex = 0;
             this.dataGridViewElevi.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewElevi_CellClick);
@@ -298,7 +320,7 @@
             this.tabMaterii.Location = new System.Drawing.Point(4, 22);
             this.tabMaterii.Name = "tabMaterii";
             this.tabMaterii.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMaterii.Size = new System.Drawing.Size(1049, 507);
+            this.tabMaterii.Size = new System.Drawing.Size(1042, 507);
             this.tabMaterii.TabIndex = 2;
             this.tabMaterii.Text = "Materii";
             this.tabMaterii.UseVisualStyleBackColor = true;
@@ -307,12 +329,15 @@
             // 
             this.dataGridViewMaterii.AllowUserToAddRows = false;
             this.dataGridViewMaterii.AllowUserToDeleteRows = false;
+            this.dataGridViewMaterii.BackgroundColor = System.Drawing.Color.LightGray;
             this.dataGridViewMaterii.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMaterii.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewMaterii.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewMaterii.Name = "dataGridViewMaterii";
             this.dataGridViewMaterii.ReadOnly = true;
-            this.dataGridViewMaterii.Size = new System.Drawing.Size(1043, 501);
+            this.dataGridViewMaterii.RowHeadersVisible = false;
+            this.dataGridViewMaterii.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewMaterii.Size = new System.Drawing.Size(1036, 501);
             this.dataGridViewMaterii.TabIndex = 0;
             this.dataGridViewMaterii.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMaterii_CellClick);
             this.dataGridViewMaterii.Click += new System.EventHandler(this.dataGridViewMaterii_Click);
@@ -323,7 +348,7 @@
             this.tabNote.Location = new System.Drawing.Point(4, 22);
             this.tabNote.Name = "tabNote";
             this.tabNote.Padding = new System.Windows.Forms.Padding(3);
-            this.tabNote.Size = new System.Drawing.Size(1049, 507);
+            this.tabNote.Size = new System.Drawing.Size(1042, 507);
             this.tabNote.TabIndex = 3;
             this.tabNote.Text = "Note";
             this.tabNote.UseVisualStyleBackColor = true;
@@ -335,10 +360,13 @@
             this.dataGridViewNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewNote.BackgroundColor = System.Drawing.Color.LightGray;
             this.dataGridViewNote.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewNote.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewNote.Name = "dataGridViewNote";
             this.dataGridViewNote.ReadOnly = true;
+            this.dataGridViewNote.RowHeadersVisible = false;
+            this.dataGridViewNote.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewNote.Size = new System.Drawing.Size(1043, 497);
             this.dataGridViewNote.TabIndex = 0;
             this.dataGridViewNote.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewNote_CellClick);
@@ -461,41 +489,11 @@
             this.btnSterge.Text = "Sterge";
             this.btnSterge.UseVisualStyleBackColor = true;
             // 
-            // btnSelecPic
-            // 
-            this.btnSelecPic.Location = new System.Drawing.Point(841, 274);
-            this.btnSelecPic.Name = "btnSelecPic";
-            this.btnSelecPic.Size = new System.Drawing.Size(75, 23);
-            this.btnSelecPic.TabIndex = 2;
-            this.btnSelecPic.Text = "Browse";
-            this.btnSelecPic.UseVisualStyleBackColor = true;
-            this.btnSelecPic.Click += new System.EventHandler(this.btnSelecPic_Click);
-            // 
-            // btnSavePic
-            // 
-            this.btnSavePic.Location = new System.Drawing.Point(922, 274);
-            this.btnSavePic.Name = "btnSavePic";
-            this.btnSavePic.Size = new System.Drawing.Size(75, 23);
-            this.btnSavePic.TabIndex = 3;
-            this.btnSavePic.Text = "Salvează";
-            this.btnSavePic.UseVisualStyleBackColor = true;
-            this.btnSavePic.Click += new System.EventHandler(this.btnSavePic_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(92, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "label1";
-            // 
             // DataDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1057, 577);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnSterge);
             this.Controls.Add(this.btnModifica);
             this.Controls.Add(this.btnExit);
@@ -531,7 +529,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.liceuXDataSet1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tEleviBindingSource)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -581,6 +578,5 @@
         private System.Windows.Forms.PictureBox picBoxProfesor;
         private System.Windows.Forms.Button btnSavePic;
         private System.Windows.Forms.Button btnSelecPic;
-        private System.Windows.Forms.Label label1;
     }
 }

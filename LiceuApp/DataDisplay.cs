@@ -29,6 +29,7 @@ namespace LiceuApp
         public string salarProf { get; set; }   
         public int idMatProf { get; set; }  
         public int idProf { get; set; }
+        public int memoRowID { get; set; }
         #endregion
 
         #region gridview Elevi data
@@ -72,8 +73,6 @@ namespace LiceuApp
 
         private void DataDisplay_Load(object sender, EventArgs e)
         {
-            
-
             // TODO: This line of code loads data into the 'liceuXDataSet4.tProfesori' table. You can move, or remove it, as needed.
             this.tProfesoriTableAdapter1.Fill(this.liceuXDataSet4.tProfesori);
             // TODO: This line of code loads data into the 'liceuXDataSet3.tNote' table. You can move, or remove it, as needed.
@@ -96,8 +95,6 @@ namespace LiceuApp
             DataTable dt = new DataTable();
             myDataAdapter.Fill(dt);
 
-          
-
             dataGridViewProfesori.DataSource = dt;
             dataGridViewProfesori.Columns["ID"].Visible = false;
             dataGridViewProfesori.Columns["nume"].HeaderText = "Nume";
@@ -110,12 +107,10 @@ namespace LiceuApp
             dataGridViewProfesori.Columns["materie"].HeaderText = "Materie";
 
 
-
             dataGridViewElevi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewMaterii.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewNote.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewElevi.Columns[5].HeaderText = "Nume Tata";
-
 
 
             SqlCommand cmdNote = new SqlCommand("SELECT \r\n       N.ID,\r\n       E.nume, \r\n\t   E.prenume, \r\n\t   clasa, \r\n\t   nota, \r\n\t   M.materie,\r\n\t   N.ID_materie, \r\n\t   ID_profesor,\r\n\t   P.nume,\r\n\t   P.prenume\r\nFROM tElevi as E \r\nJOIN tNote as N on E.ID = N.ID_elev\r\nJOIN tMaterii as M on N.ID_materie = M.ID\r\nJOIN tProfesori as P on N.ID_profesor = P.ID", myDbConnection);
@@ -154,7 +149,13 @@ namespace LiceuApp
             dataGridViewMaterii.Columns["prenume"].HeaderText = "Prenume";
             dataGridViewMaterii.Columns["pic_URL"].Visible = false;
 
-
+            if (idProf == 0){}
+            else
+            {
+                //dataGridViewProfesori.ClearSelection();
+                dataGridViewProfesori.CurrentRow.Selected = false;
+                dataGridViewProfesori.Rows[memoRowID].Selected = true;
+            }
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -225,36 +226,36 @@ namespace LiceuApp
         {
 
         }
-
-      
         private void dataGridViewProfesori_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowID = e.RowIndex;
 
-            idProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[0].Value.ToString());
-            numeProf = dataGridViewProfesori.Rows[rowID].Cells[1].Value.ToString();
-            prenumeProf = dataGridViewProfesori.Rows[rowID].Cells[2].Value.ToString();
-            varstaProf = dataGridViewProfesori.Rows[rowID].Cells[3].Value.ToString();
-            salarProf = dataGridViewProfesori.Rows[rowID].Cells[4].Value.ToString();
-            idMatProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[5].Value.ToString());
+            memoRowID = rowID;
 
-            var imgURL = dataGridViewProfesori.Rows[rowID].Cells[6].Value.ToString();
-            if (string.IsNullOrEmpty(imgURL))
-            {
-                imgURL = @"D:\x Projects\WebApp\LiceuApp\LiceuApp\Resorces\Pictures\def\user.png";
-                picBoxProfesor.ImageLocation = imgURL;
-            } 
-            else
-            {
-                picBoxProfesor.ImageLocation = imgURL;
-            }
+          
+                idProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[0].Value.ToString());
+                numeProf = dataGridViewProfesori.Rows[rowID].Cells[1].Value.ToString();
+                prenumeProf = dataGridViewProfesori.Rows[rowID].Cells[2].Value.ToString();
+                varstaProf = dataGridViewProfesori.Rows[rowID].Cells[3].Value.ToString();
+                salarProf = dataGridViewProfesori.Rows[rowID].Cells[4].Value.ToString();
+                idMatProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[5].Value.ToString());
+
+                var imgURL = dataGridViewProfesori.Rows[rowID].Cells[6].Value.ToString();
+                if (string.IsNullOrEmpty(imgURL))
+                {
+                    imgURL = @"D:\x Projects\WebApp\LiceuApp\LiceuApp\Resorces\Pictures\def\user.png";
+                    picBoxProfesor.ImageLocation = imgURL;
+                }
+                else
+                {
+                    picBoxProfesor.ImageLocation = imgURL;
+                }
+            
         }
-
         private void dataGridViewProfesori_SelectionChanged(object sender, EventArgs e)
         {
-
+            
         }
-
         private void dataGridViewElevi_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowID = e.RowIndex;
@@ -270,11 +271,9 @@ namespace LiceuApp
             tel2 = dataGridViewElevi.Rows[rowID].Cells[8].Value.ToString();
             clasaElev = dataGridViewElevi.Rows[rowID].Cells[9].Value.ToString();
         }
-
         private void tabDataView_Click_1(object sender, EventArgs e)
         {
         }
-
         private void dataGridViewMaterii_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowID = e.RowIndex;
@@ -282,21 +281,25 @@ namespace LiceuApp
             idMaterie = int.Parse(dataGridViewMaterii.Rows[rowID].Cells[5].Value.ToString());
             materie = dataGridViewMaterii.Rows[rowID].Cells[7].Value.ToString();
         }
-
         private void dataGridViewNote_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowID = e.RowIndex;
-            idNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[0].Value.ToString());
-            valoareNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[4].Value.ToString());
-            materieUpdate = dataGridViewNote.Rows[rowID].Cells[5].Value.ToString();
-            noteClasaUpdate = dataGridViewNote.Rows[rowID].Cells[3].Value.ToString();
-            numeElevNota = dataGridViewNote.Rows[rowID].Cells[1].Value.ToString();
-            prenumeElevNota = dataGridViewNote.Rows[rowID].Cells[2].Value.ToString();
-            numePNota = dataGridViewNote.Rows[rowID].Cells[8].Value.ToString();
-            prenumePNota = dataGridViewNote.Rows[rowID].Cells[9].Value.ToString();
+
+            if (rowID == 0){}
+            else
+            {
+                idNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[0].Value.ToString());
+                valoareNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[4].Value.ToString());
+                materieUpdate = dataGridViewNote.Rows[rowID].Cells[5].Value.ToString();
+                noteClasaUpdate = dataGridViewNote.Rows[rowID].Cells[3].Value.ToString();
+                numeElevNota = dataGridViewNote.Rows[rowID].Cells[1].Value.ToString();
+                prenumeElevNota = dataGridViewNote.Rows[rowID].Cells[2].Value.ToString();
+                numePNota = dataGridViewNote.Rows[rowID].Cells[8].Value.ToString();
+                prenumePNota = dataGridViewNote.Rows[rowID].Cells[9].Value.ToString();
+            }
+            
 
     }
-
         private void btnSelecPic_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofdProfPic = new OpenFileDialog();
@@ -312,11 +315,10 @@ namespace LiceuApp
                 fileExt = extn;
 
                 sourceFile = filePath;
-                label1.Text = filePath;
+                //label1.Text = filePath;
                 picBoxProfesor.Image = new Bitmap(filePath);
             }
         }
-
         private void btnSavePic_Click(object sender, EventArgs e)
         {
             if (idProf == 0) {
@@ -359,7 +361,6 @@ namespace LiceuApp
                     MessageBox.Show("Poza a fost salvata!");
 
                     DataDisplay dataDisplayForm = new DataDisplay();
-                    this.Close();
                 }
                 catch (SqlException ex)
                 {
