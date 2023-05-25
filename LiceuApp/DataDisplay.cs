@@ -232,6 +232,7 @@ namespace LiceuApp
 
             memoRowID = rowID;
 
+            if (e.RowIndex == -1) return;
           
                 idProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[0].Value.ToString());
                 numeProf = dataGridViewProfesori.Rows[rowID].Cells[1].Value.ToString();
@@ -260,6 +261,8 @@ namespace LiceuApp
         {
             int rowID = e.RowIndex;
 
+            if (e.RowIndex == -1) return;
+
             idElev = int.Parse(dataGridViewElevi.Rows[rowID].Cells[0].Value.ToString());
             numeElev = dataGridViewElevi.Rows[rowID].Cells[1].Value.ToString();
             prenumeElev = dataGridViewElevi.Rows[rowID].Cells[2].Value.ToString();
@@ -278,6 +281,8 @@ namespace LiceuApp
         {
             int rowID = e.RowIndex;
 
+            if (e.RowIndex == -1) return;
+
             idMaterie = int.Parse(dataGridViewMaterii.Rows[rowID].Cells[5].Value.ToString());
             materie = dataGridViewMaterii.Rows[rowID].Cells[7].Value.ToString();
         }
@@ -285,10 +290,9 @@ namespace LiceuApp
         {
             int rowID = e.RowIndex;
 
-            if (rowID == 0){}
-            else
-            {
-                idNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[0].Value.ToString());
+            if (e.RowIndex == -1) return;
+
+            idNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[0].Value.ToString());
                 valoareNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[4].Value.ToString());
                 materieUpdate = dataGridViewNote.Rows[rowID].Cells[5].Value.ToString();
                 noteClasaUpdate = dataGridViewNote.Rows[rowID].Cells[3].Value.ToString();
@@ -296,7 +300,7 @@ namespace LiceuApp
                 prenumeElevNota = dataGridViewNote.Rows[rowID].Cells[2].Value.ToString();
                 numePNota = dataGridViewNote.Rows[rowID].Cells[8].Value.ToString();
                 prenumePNota = dataGridViewNote.Rows[rowID].Cells[9].Value.ToString();
-            }
+
             
 
     }
