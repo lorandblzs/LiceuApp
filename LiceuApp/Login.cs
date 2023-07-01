@@ -21,10 +21,33 @@ namespace LiceuApp
         {
             InitializeComponent();
 
+            #region Buttons styling
+            btnX.BackColor = Color.FromArgb(100, Color.White);
+            btnX.ForeColor = Color.White;
+            btnX.FlatAppearance.BorderSize = 0;
+            btnX.FlatAppearance.MouseOverBackColor = Color.FromArgb(150, Color.Red);
+            btnX.FlatAppearance.MouseDownBackColor = Color.FromArgb(250, Color.Red);
+            btnX.FlatStyle = FlatStyle.Flat;
+
+            btnClear.BackColor = Color.FromArgb(150, 88, 176, 50);
+            btnClear.ForeColor = Color.White;
+            btnClear.FlatAppearance.BorderSize = 0;
+            btnClear.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 88, 176, 50);
+            btnClear.FlatAppearance.MouseDownBackColor = Color.FromArgb(200, 88, 176, 50);
+            btnClear.FlatStyle = FlatStyle.Flat;
+
+            btnLogin.BackColor = Color.FromArgb(150, 88, 176, 50);
+            btnLogin.ForeColor = Color.White;
+            btnLogin.FlatAppearance.BorderSize = 0;
+            btnLogin.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 88, 176, 50);
+            btnLogin.FlatAppearance.MouseDownBackColor = Color.FromArgb(200, 88, 176, 50);
+            btnLogin.FlatStyle = FlatStyle.Flat;
+            #endregion
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
+
             SqlConnection myDbConnection = new SqlConnection();
             myDbConnection.ConnectionString = "Data Source=DESKTOP-99A38O7\\SQLEXPRESS;Initial Catalog=LiceuX;Integrated Security=True;";
 
@@ -96,6 +119,11 @@ namespace LiceuApp
             {
                 btnLogin_Click(sender, e);
             }
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            txtUserName.Select();
         }
     }
 }

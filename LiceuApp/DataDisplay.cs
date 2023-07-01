@@ -17,17 +17,27 @@ using static System.Net.WebRequestMethods;
 using System.Runtime.CompilerServices;
 using LiceuApp.Properties;
 using System.Security.Cryptography;
+using System.Configuration;
+
 
 namespace LiceuApp
 {
     public partial class DataDisplay : Form
     {
+        public string mainConn = ConfigurationManager.ConnectionStrings["LiceuAppConnectionString"].ConnectionString;
+        SqlConnection sqlConn;
+
+        private DataTable dt;
+        private DataTable dtElevi;
+        private DataTable dtNote;
+        private DataTable dtMaterii;
+
         #region gridview Profesori data
         public string numeProf { get; set; }
         public string prenumeProf { get; set; }
         public string varstaProf { get; set; }
-        public string salarProf { get; set; }   
-        public int idMatProf { get; set; }  
+        public string salarProf { get; set; }
+        public int idMatProf { get; set; }
         public int idProf { get; set; }
         public int memoRowID { get; set; }
         #endregion
@@ -43,11 +53,13 @@ namespace LiceuApp
         public string tel1 { get; set; }
         public string tel2 { get; set; }
         public string clasaElev { get; set; }
+        public int memoRowIDElev { get; set; }
         #endregion
 
         #region gridview Materii data
         public int idMaterie { get; set; }
         public string materie { get; set; }
+        public int memoRowIDMaterii { get; set; }
         #endregion
 
         #region gridview Note data
@@ -61,63 +73,143 @@ namespace LiceuApp
         public string prenumeElevNota { get; set; }
         public string numePNota { get; set; }
         public string prenumePNota { get; set; }
+        public int memoRowIDNote { get; set; }
         #endregion
+
+        string appDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        string picFolderPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Pictures");
 
         public string sourceFile { get; set; }
         public string fileExt { get; set; }
         public DataDisplay()
         {
             InitializeComponent();
+            sqlConn = new SqlConnection(mainConn);
         }
 
-
         private void DataDisplay_Load(object sender, EventArgs e)
+
         {
-            // TODO: This line of code loads data into the 'liceuXDataSet4.tProfesori' table. You can move, or remove it, as needed.
-            this.tProfesoriTableAdapter1.Fill(this.liceuXDataSet4.tProfesori);
-            // TODO: This line of code loads data into the 'liceuXDataSet3.tNote' table. You can move, or remove it, as needed.
-            this.tNoteTableAdapter.Fill(this.liceuXDataSet3.tNote);
-            // TODO: This line of code loads data into the 'liceuXDataSet2.tMaterii' table. You can move, or remove it, as needed.
-            this.tMateriiTableAdapter.Fill(this.liceuXDataSet2.tMaterii);
-            // TODO: This line of code loads data into the 'liceuXDataSetElevi.tElevi' table. You can move, or remove it, as needed.
-            this.tEleviTableAdapter1.Fill(this.liceuXDataSetElevi.tElevi);
-            // TODO: This line of code loads data into the 'liceuXDataSet1.tElevi' table. You can move, or remove it, as needed.
-            this.tEleviTableAdapter.Fill(this.liceuXDataSet1.tElevi);
-            // TODO: This line of code loads data into the 'liceuXDataSet.tProfesori' table. You can move, or remove it, as needed.
-            this.tProfesoriTableAdapter.Fill(this.liceuXDataSet.tProfesori);
+            string mainConn = ConfigurationManager.ConnectionStrings["LiceuAppConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(mainConn);
 
-            SqlConnection myDbConnection = new SqlConnection();
-            myDbConnection.ConnectionString = "Data Source=DESKTOP-99A38O7\\SQLEXPRESS;Initial Catalog=LiceuX;Integrated Security=True;";
+            string picFolderPathDummy = picFolderPath.ToString();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM tProfesori INNER JOIN tMaterii on tProfesori.ID_materie=tMaterii.ID", myDbConnection);
+            #region Folder creation and check
+            if (!Directory.Exists(picFolderPath))
+            {
+                Directory.CreateDirectory(picFolderPath);
+            }
+            if (!Directory.Exists(picFolderPath + "\\Profesori\\"))
+            {
+                Directory.CreateDirectory(picFolderPath + "\\Profesori\\");
+            }
+            if (!Directory.Exists(picFolderPath + "\\Elevi\\"))
+            {
+                Directory.CreateDirectory(picFolderPath + "\\Elevi\\");
+            }
+            #endregion
+
+            #region button styling
+            btnExit.BackColor = Color.FromArgb(100, Color.Red);
+            btnExit.ForeColor = Color.White;
+            btnExit.FlatAppearance.BorderSize = 0;
+            btnExit.FlatAppearance.MouseOverBackColor = Color.FromArgb(150, Color.Red);
+            btnExit.FlatAppearance.MouseDownBackColor = Color.FromArgb(250, Color.Red);
+            btnExit.FlatStyle = FlatStyle.Flat;
+
+            btnSelecPic.BackColor = Color.FromArgb(150, 88, 176, 50);
+            btnSelecPic.ForeColor = Color.White;
+            btnSelecPic.FlatAppearance.BorderSize = 0;
+            btnSelecPic.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 88, 176, 50);
+            btnSelecPic.FlatAppearance.MouseDownBackColor = Color.FromArgb(200, 88, 176, 50);
+            btnSelecPic.FlatStyle = FlatStyle.Flat;
+
+            btnSelectPicElev.BackColor = Color.FromArgb(150, 88, 176, 50);
+            btnSelectPicElev.ForeColor = Color.White;
+            btnSelectPicElev.FlatAppearance.BorderSize = 0;
+            btnSelectPicElev.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 88, 176, 50);
+            btnSelectPicElev.FlatAppearance.MouseDownBackColor = Color.FromArgb(200, 88, 176, 50);
+            btnSelectPicElev.FlatStyle = FlatStyle.Flat;
+
+            btnDataInsert.BackColor = Color.FromArgb(150, 88, 176, 50);
+            btnDataInsert.ForeColor = Color.White;
+            btnDataInsert.FlatAppearance.BorderSize = 0;
+            btnDataInsert.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 88, 176, 50);
+            btnDataInsert.FlatAppearance.MouseDownBackColor = Color.FromArgb(200, 88, 176, 50);
+            btnDataInsert.FlatStyle = FlatStyle.Flat;
+
+            btnModifica.BackColor = Color.FromArgb(150, 88, 176, 50);
+            btnModifica.ForeColor = Color.White;
+            btnModifica.FlatAppearance.BorderSize = 0;
+            btnModifica.FlatAppearance.MouseOverBackColor = Color.FromArgb(250, 88, 176, 50);
+            btnModifica.FlatAppearance.MouseDownBackColor = Color.FromArgb(200, 88, 176, 50);
+            btnModifica.FlatStyle = FlatStyle.Flat;
+
+            btnSterge.BackColor = Color.FromArgb(100, Color.Red);
+            btnSterge.ForeColor = Color.White;
+            btnSterge.FlatAppearance.BorderSize = 0;
+            btnSterge.FlatAppearance.MouseOverBackColor = Color.FromArgb(150, Color.Red);
+            btnSterge.FlatAppearance.MouseDownBackColor = Color.FromArgb(250, Color.Red);
+            btnSterge.FlatStyle = FlatStyle.Flat;
+            #endregion
+
+            #region fill datatable Profesori
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tProfesori INNER JOIN tMaterii on tProfesori.ID_materie=tMaterii.ID", sqlConn);
             SqlDataAdapter myDataAdapter = new SqlDataAdapter();
             myDataAdapter.SelectCommand = cmd;
-            DataTable dt = new DataTable();
+            dt = new DataTable();
             myDataAdapter.Fill(dt);
 
             dataGridViewProfesori.DataSource = dt;
             dataGridViewProfesori.Columns["ID"].Visible = false;
             dataGridViewProfesori.Columns["nume"].HeaderText = "Nume";
             dataGridViewProfesori.Columns["prenume"].HeaderText = "Prenume";
-            dataGridViewProfesori.Columns["Varsta"].HeaderText = "Vârstă";
-            dataGridViewProfesori.Columns["salar"].HeaderText = "Salar";
+            dataGridViewProfesori.Columns["Varsta"].Visible = false;
+            dataGridViewProfesori.Columns["salar"].Visible = false;
             dataGridViewProfesori.Columns["pic_URL"].Visible = false;
             dataGridViewProfesori.Columns["ID_materie"].Visible = false;
             dataGridViewProfesori.Columns["ID1"].Visible = false;
             dataGridViewProfesori.Columns["materie"].HeaderText = "Materie";
+            #endregion
 
+            #region fill DataGridView Elevi
+            SqlCommand cmdElevi = new SqlCommand("SELECT * FROM tElevi", sqlConn);
+            SqlDataAdapter myDataAdapterElevi = new SqlDataAdapter();
+            myDataAdapterElevi.SelectCommand = cmdElevi;
+            dtElevi = new DataTable();
+            myDataAdapterElevi.Fill(dtElevi);
+
+            dataGridViewElevi.DataSource = dtElevi;
+
+           
+            dataGridViewElevi.Columns["nume"].HeaderText = "Nume";
+            dataGridViewElevi.Columns["prenume"].HeaderText = "Prenume";
+            dataGridViewElevi.Columns["adresa"].Visible = false;
+            dataGridViewElevi.Columns["nume_mama"].Visible = false;
+            dataGridViewElevi.Columns["nume_tata"].Visible = false;
+            dataGridViewElevi.Columns["telefon_1"].Visible = false;
+            dataGridViewElevi.Columns["telefon_2"].Visible = false;
+            dataGridViewElevi.Columns["clasa"].Visible = false;
+            dataGridViewElevi.Columns["pic_URL"].Visible = false;
+            //dataGridViewElevi.Columns[0].Visible = false;
+            dataGridViewElevi.Columns["ID"].Visible = false;
+
+      
+
+            #endregion
 
             dataGridViewElevi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewMaterii.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewNote.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewElevi.Columns[5].HeaderText = "Nume Tata";
 
-
-            SqlCommand cmdNote = new SqlCommand("SELECT \r\n       N.ID,\r\n       E.nume, \r\n\t   E.prenume, \r\n\t   clasa, \r\n\t   nota, \r\n\t   M.materie,\r\n\t   N.ID_materie, \r\n\t   ID_profesor,\r\n\t   P.nume,\r\n\t   P.prenume\r\nFROM tElevi as E \r\nJOIN tNote as N on E.ID = N.ID_elev\r\nJOIN tMaterii as M on N.ID_materie = M.ID\r\nJOIN tProfesori as P on N.ID_profesor = P.ID", myDbConnection);
+            #region fill DataGridView Note
+            SqlCommand cmdNote = new SqlCommand("SELECT        \r\n\tN.ID,\r\n\tE.nume,\r\n\tE.prenume,\r\n\tclasa,\r\n\tnota, \r\n\tM.materie,\r\n\tN.ID_materie, \r\n\tID_profesor,\r\n\tP.nume,\r\n\tP.prenume,\r\n\tN.ID_elev\r\n\tFROM tElevi as E \r\n\tJOIN tNote as N on E.ID = N.ID_elev\r\n\tJOIN tMaterii as M on N.ID_materie = M.ID\r\n\tJOIN tProfesori as P on N.ID_profesor = P.ID", sqlConn);
             SqlDataAdapter myDataAdapterNote = new SqlDataAdapter();
             myDataAdapterNote.SelectCommand = cmdNote;
-            DataTable dtNote = new DataTable();
+            dtNote = new DataTable();
             myDataAdapterNote.Fill(dtNote);
+
             dataGridViewNote.DataSource = dtNote;
             dataGridViewNote.Columns[0].Visible = false;
             dataGridViewNote.Columns[1].HeaderText = "Nume Elev";
@@ -129,14 +221,16 @@ namespace LiceuApp
             dataGridViewNote.Columns[7].Visible = false;
             dataGridViewNote.Columns[8].HeaderText = "Nume Profesor";
             dataGridViewNote.Columns[9].HeaderText = "Prenume Profesor";
+            dataGridViewNote.Columns["ID_elev"].Visible = false;
+            #endregion
 
-            dataGridViewElevi.Columns[0].Visible = false;
-
-            SqlCommand cmdMaterii = new SqlCommand("SELECT\r\n     M.materie,\r\n     M.ID,\r\n\t P.ID,\r\n\t nume,\r\n\t prenume\r\nFROM tMaterii as M\r\nJOIN tProfesori as P on M.ID = P.ID_materie", myDbConnection);
+            #region fill DataGridView Materii
+            SqlCommand cmdMaterii = new SqlCommand("SELECT\r\n     M.materie,\r\n     M.ID,\r\n\t P.ID,\r\n\t nume,\r\n\t prenume\r\nFROM tMaterii as M\r\nJOIN tProfesori as P on M.ID = P.ID_materie", sqlConn);
             SqlDataAdapter myDataAdapterMaterii = new SqlDataAdapter();
             myDataAdapterMaterii.SelectCommand = cmdMaterii;
-            DataTable dtMaterii = new DataTable();
+            dtMaterii = new DataTable();
             myDataAdapter.Fill(dtMaterii);
+
             dataGridViewMaterii.DataSource = dtMaterii;
             dataGridViewMaterii.Columns["ID"].Visible = false;
             dataGridViewMaterii.Columns["varsta"].Visible = false;
@@ -148,19 +242,133 @@ namespace LiceuApp
             dataGridViewMaterii.Columns["nume"].HeaderText = "Nume";
             dataGridViewMaterii.Columns["prenume"].HeaderText = "Prenume";
             dataGridViewMaterii.Columns["pic_URL"].Visible = false;
+            #endregion
 
-            if (idProf == 0){}
+            #region filter datagridview prof
+            if (idProf == 0) {}
             else
             {
-                //dataGridViewProfesori.ClearSelection();
-                dataGridViewProfesori.CurrentRow.Selected = false;
-                dataGridViewProfesori.Rows[memoRowID].Selected = true;
+                dataGridViewProfesori.ClearSelection();
+                dataGridViewProfesori.CurrentRow.Selected = false; 
+                if (memoRowID <= 0 || memoRowID >= dataGridViewProfesori.Rows.Count) {}
+                else
+                {
+                    dataGridViewProfesori.Rows[memoRowID].Selected = true;
+                }
             }
-        }
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
+            DataColumn dcRowString = dt.Columns.Add("rowStr", typeof(string));
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (DataColumn column in dt.Columns)
+                {
+                    // Check if the column is selected
+                    if (dataGridViewProfesori.Columns[column.ColumnName].Visible)
+                    {
+                        sb.Append(dataRow[column].ToString());
+                        sb.Append("\t");
+                    }
+                }
+                dataRow[dcRowString] = sb.ToString();
+            }
+            dataGridViewProfesori.Columns["rowStr"].Visible = false;
+            #endregion
+
+            #region filter datagridview elevi
+            if (idElev == 0) { }
+            else
+            {
+                dataGridViewElevi.ClearSelection();
+                dataGridViewElevi.CurrentRow.Selected = false;
+                if (memoRowIDElev <= 0 || memoRowIDElev >= dataGridViewElevi.Rows.Count) { }
+                else
+                {
+                    dataGridViewElevi.Rows[memoRowIDElev].Selected = true;
+                }
+            }
+
+            DataColumn dcRowStringElevi = dtElevi.Columns.Add("rowStr", typeof(string));
+            foreach (DataRow dataRow in dtElevi.Rows)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (DataColumn column in dtElevi.Columns)
+                {
+                    // Check if the column is selected
+                    if (dataGridViewElevi.Columns[column.ColumnName].Visible)
+                    {
+                        sb.Append(dataRow[column].ToString());
+                        sb.Append("\t");
+                    }
+                }
+                dataRow[dcRowStringElevi] = sb.ToString();
+            }
+            dataGridViewElevi.Columns["rowStr"].Visible = false;
+            #endregion
+
+            #region filter materii
+            if (idMaterie == 0) { }
+            else
+            {
+                dataGridViewMaterii.ClearSelection();
+                dataGridViewMaterii.CurrentRow.Selected = false;
+                if (memoRowIDMaterii <= 0 || memoRowIDMaterii >= dataGridViewMaterii.Rows.Count) { }
+                else
+                {
+                    dataGridViewMaterii.Rows[memoRowIDMaterii].Selected = true;
+                }
+            }
+
+            DataColumn dcRowStringMaterii = dtMaterii.Columns.Add("rowStr", typeof(string));
+            foreach (DataRow dataRow in dtMaterii.Rows)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (DataColumn column in dtMaterii.Columns)
+                {
+                    // Check if the column is selected
+                    if (dataGridViewMaterii.Columns[column.ColumnName].Visible)
+                    {
+                        sb.Append(dataRow[column].ToString());
+                        sb.Append("\t");
+                    }
+                }
+                dataRow[dcRowStringMaterii] = sb.ToString();
+            }
+            dataGridViewMaterii.Columns["rowStr"].Visible = false;
+            #endregion
+
+            #region note filter
+            if (idNota == 0) { }
+            else
+            {
+                dataGridViewNote.ClearSelection();
+                dataGridViewNote.CurrentRow.Selected = false;
+                if (memoRowIDNote <= 0 || memoRowIDNote >= dataGridViewNote.Rows.Count) { }
+                else
+                {
+                    dataGridViewNote.Rows[memoRowIDNote].Selected = true;
+                }
+            }
+
+            DataColumn dcRowStringNote = dtNote.Columns.Add("rowStr", typeof(string));
+            foreach (DataRow dataRow in dtNote.Rows)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (DataColumn column in dtNote.Columns)
+                {
+                    // Check if the column is selected
+                    if (dataGridViewNote.Columns[column.ColumnName].Visible)
+                    {
+                        sb.Append(dataRow[column].ToString());
+                        sb.Append("\t");
+                    }
+                }
+                dataRow[dcRowStringNote] = sb.ToString();
+            }
+            dataGridViewNote.Columns["rowStr"].Visible = false;
+            #endregion
         }
+
         private void btnExit_Click(object sender, EventArgs e)
         {
             DialogResult dlgRes;
@@ -175,25 +383,23 @@ namespace LiceuApp
                 this.Show();
             }
         }
+
         private void btnDataInsert_Click(object sender, EventArgs e)
         {
             DataAdd dataAddForm = new DataAdd();
             dataAddForm.ShowDialog();
         }
-        private void dataGridViewProfesori_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-          
-        }
+
         private void btnModifica_Click(object sender, EventArgs e)
         {
             int currentTabPage;
             currentTabPage = tabDataView.SelectedIndex;
-            
+
             if (currentTabPage == 0)
             {
                 updateProfesori updateProfesoriForm = new updateProfesori(numeProf, prenumeProf, varstaProf, salarProf, idMatProf, idProf);
                 updateProfesoriForm.ShowDialog();
-            } 
+            }
             if (currentTabPage == 1)
             {
                 updateElevi updateEleviForm = new updateElevi(idElev, numeElev, prenumeElev, adresaElev, numeMElev, numeTElev, CNP, tel1, tel2, clasaElev);
@@ -210,57 +416,54 @@ namespace LiceuApp
                 updateNoteForm.ShowDialog();
             }
         }
-        private void dataGridViewMaterii_Click(object sender, EventArgs e)
-        {
 
-        }
-        private void tabDataView_Click(object sender, EventArgs e)
-        {
-            
-        }
-        private void tabDataView_TabIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
         private void dataGridViewProfesori_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            string picFolderPathDummy = picFolderPath.ToString();
             int rowID = e.RowIndex;
 
             memoRowID = rowID;
 
             if (e.RowIndex == -1) return;
-          
-                idProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[0].Value.ToString());
-                numeProf = dataGridViewProfesori.Rows[rowID].Cells[1].Value.ToString();
-                prenumeProf = dataGridViewProfesori.Rows[rowID].Cells[2].Value.ToString();
-                varstaProf = dataGridViewProfesori.Rows[rowID].Cells[3].Value.ToString();
-                salarProf = dataGridViewProfesori.Rows[rowID].Cells[4].Value.ToString();
-                idMatProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[5].Value.ToString());
 
-                var imgURL = dataGridViewProfesori.Rows[rowID].Cells[6].Value.ToString();
-                if (string.IsNullOrEmpty(imgURL))
-                {
-                    imgURL = @"D:\x Projects\WebApp\LiceuApp\LiceuApp\Resorces\Pictures\def\user.png";
-                    picBoxProfesor.ImageLocation = imgURL;
-                }
-                else
-                {
-                    picBoxProfesor.ImageLocation = imgURL;
-                }
-            
+            idProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[0].Value.ToString());
+            numeProf = dataGridViewProfesori.Rows[rowID].Cells[1].Value.ToString();
+            prenumeProf = dataGridViewProfesori.Rows[rowID].Cells[2].Value.ToString();
+            varstaProf = dataGridViewProfesori.Rows[rowID].Cells[3].Value.ToString();
+            salarProf = dataGridViewProfesori.Rows[rowID].Cells[4].Value.ToString();
+            idMatProf = int.Parse(dataGridViewProfesori.Rows[rowID].Cells[5].Value.ToString());
+
+            lblTabProfNumeDSP.Visible = true;
+            lblTabProfNumeDSP.Text = numeProf;
+            lblTabProfPrenumeDSP.Visible = true;
+            lblTabProfPrenumeDSP.Text = prenumeProf;
+            lblTabProfMaterieDSP.Visible = true;
+            lblTabProfMaterieDSP.Text = dataGridViewProfesori.Rows[rowID].Cells["materie"].Value.ToString();
+            lblTabProfVarstaDSP.Visible = true;
+            lblTabProfVarstaDSP.Text = varstaProf;
+            lbltabProfSalarDSP.Visible = true;
+            lbltabProfSalarDSP.Text = salarProf;
+
+            var imgURL = dataGridViewProfesori.Rows[rowID].Cells[6].Value.ToString();
+            var tempIMGURL = Path.Combine(picFolderPathDummy + imgURL);
+            Image defaultImage = Properties.Resources.user_green;
+
+            if (string.IsNullOrEmpty(imgURL) || !System.IO.File.Exists(tempIMGURL))
+            {
+                picBoxProfesor.Image = defaultImage;
+            }
+            else
+            {
+                picBoxProfesor.ImageLocation = tempIMGURL;
+            }
         }
-        private void dataGridViewProfesori_SelectionChanged(object sender, EventArgs e)
-        {
-            
-        }
+
         private void dataGridViewElevi_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            string picFolderPathDummyElev = picFolderPath.ToString();
             int rowID = e.RowIndex;
 
+            memoRowIDElev = rowID;
             if (e.RowIndex == -1) return;
 
             idElev = int.Parse(dataGridViewElevi.Rows[rowID].Cells[0].Value.ToString());
@@ -273,37 +476,87 @@ namespace LiceuApp
             tel1 = dataGridViewElevi.Rows[rowID].Cells[7].Value.ToString();
             tel2 = dataGridViewElevi.Rows[rowID].Cells[8].Value.ToString();
             clasaElev = dataGridViewElevi.Rows[rowID].Cells[9].Value.ToString();
+
+
+            lblNumeElevDsiplay.Text = numeElev;
+            lblNumeElevDsiplay.Visible = true;
+            lblPrenumeElevDisplay.Text = prenumeElev;
+            lblPrenumeElevDisplay.Visible = true;
+            lblAdresaDisplay.Text = adresaElev;
+            lblAdresaDisplay.Visible = true;
+            lblNumeMamaDisplay.Text = numeMElev;
+            lblNumeMamaDisplay.Visible = true;
+            lblNumeTataDisplay.Text = numeTElev;
+            lblNumeTataDisplay.Visible = true;
+            lblCNPDisplay.Text = CNP;
+            lblCNPDisplay.Visible = true;
+            lblTel1Display.Text = tel1;
+            lblTel1Display.Visible = true;
+            lblTel2Display.Text = tel2;
+            lblTel2Display.Visible = true;
+            lblClasaDisplay.Text = clasaElev;
+            lblClasaDisplay.Visible = true;
+
+            int currentTabPage = tabDataView.SelectedIndex;
+            if (currentTabPage == 1)
+            {
+                int targetID = idElev;
+                var rows = dtNote.AsEnumerable().Where(row => row.Field<int>("ID") == targetID);
+
+                if (rows.Any())
+                {
+                    double average = rows.Average(row => row.Field<int>("nota"));
+                    lblMediaNumberDsplay.Text = average.ToString();
+                }
+                else
+                {
+                    lblMediaNumberDsplay.Text = "Elevul nu are note";
+                }
+                lblMediaNumberDsplay.Visible = true;
+            }
+
+            var imgURLElev = dataGridViewElevi.Rows[rowID].Cells[10].Value.ToString();
+            var tempIMGURLElev = Path.Combine(picFolderPathDummyElev + imgURLElev);
+            Image defaultImage = Properties.Resources.user_green;
+
+            if (string.IsNullOrEmpty(imgURLElev) || !System.IO.File.Exists(tempIMGURLElev))
+            {
+                picBoxElev.Image = defaultImage;
+            }
+            else
+            {
+                picBoxElev.ImageLocation = tempIMGURLElev;
+            }
         }
-        private void tabDataView_Click_1(object sender, EventArgs e)
-        {
-        }
+
         private void dataGridViewMaterii_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowID = e.RowIndex;
+            memoRowIDMaterii = rowID;
 
             if (e.RowIndex == -1) return;
 
             idMaterie = int.Parse(dataGridViewMaterii.Rows[rowID].Cells[5].Value.ToString());
             materie = dataGridViewMaterii.Rows[rowID].Cells[7].Value.ToString();
         }
+
         private void dataGridViewNote_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowID = e.RowIndex;
+            memoRowIDNote = rowID;
 
             if (e.RowIndex == -1) return;
 
             idNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[0].Value.ToString());
-                valoareNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[4].Value.ToString());
-                materieUpdate = dataGridViewNote.Rows[rowID].Cells[5].Value.ToString();
-                noteClasaUpdate = dataGridViewNote.Rows[rowID].Cells[3].Value.ToString();
-                numeElevNota = dataGridViewNote.Rows[rowID].Cells[1].Value.ToString();
-                prenumeElevNota = dataGridViewNote.Rows[rowID].Cells[2].Value.ToString();
-                numePNota = dataGridViewNote.Rows[rowID].Cells[8].Value.ToString();
-                prenumePNota = dataGridViewNote.Rows[rowID].Cells[9].Value.ToString();
+            valoareNota = int.Parse(dataGridViewNote.Rows[rowID].Cells[4].Value.ToString());
+            materieUpdate = dataGridViewNote.Rows[rowID].Cells[5].Value.ToString();
+            noteClasaUpdate = dataGridViewNote.Rows[rowID].Cells[3].Value.ToString();
+            numeElevNota = dataGridViewNote.Rows[rowID].Cells[1].Value.ToString();
+            prenumeElevNota = dataGridViewNote.Rows[rowID].Cells[2].Value.ToString();
+            numePNota = dataGridViewNote.Rows[rowID].Cells[8].Value.ToString();
+            prenumePNota = dataGridViewNote.Rows[rowID].Cells[9].Value.ToString();
+        }
 
-            
-
-    }
         private void btnSelecPic_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofdProfPic = new OpenFileDialog();
@@ -317,61 +570,289 @@ namespace LiceuApp
                 FileInfo fi = new FileInfo(filePath);
                 string extn = fi.Extension;
                 fileExt = extn;
-
                 sourceFile = filePath;
-                //label1.Text = filePath;
-                picBoxProfesor.Image = new Bitmap(filePath);
-            }
-        }
-        private void btnSavePic_Click(object sender, EventArgs e)
-        {
-            if (idProf == 0) {
+                picBoxProfesor = default;
 
-                MessageBox.Show("Nu ati selectat profesorul!");
-
-            } 
-            if (sourceFile == string.Empty ) {
-
-                MessageBox.Show("Nu ati selectat poza!");
-
-            } 
-            else
-            {
-                string fileName = sourceFile.ToString();
-                string destFileName = Path.Combine(@"D:\x Projects\WebApp\LiceuApp\LiceuApp\Resorces\Pictures\Profesori\" + "ID_" + idProf + "_" + numeProf + prenumeProf + fileExt);
-
-                if (System.IO.File.Exists(destFileName))
+                if (idProf == 0)
                 {
-                    System.IO.File.Delete(destFileName);
-                    System.IO.File.Copy(fileName, destFileName);
+                    MessageBox.Show("Nu ati selectat profesorul!");
+                }
+                if (sourceFile == string.Empty)
+                {
+                    MessageBox.Show("Nu ati selectat poza!");
                 }
                 else
                 {
-                    System.IO.File.Copy(fileName, destFileName);
-                }
+                    string fileName = sourceFile.ToString();
+                    string destFileName = Path.Combine(picFolderPath + "\\Profesori\\" + "ID_" + idProf + "_" + numeProf + prenumeProf + fileExt);
+                    string picStringDB = "\\Profesori\\" + "ID_" + idProf + "_" + numeProf + prenumeProf + fileExt;
 
-                SqlConnection myDbConnection = new SqlConnection();
-                myDbConnection.ConnectionString = "Data Source=DESKTOP-99A38O7\\SQLEXPRESS;Initial Catalog=LiceuX;Integrated Security=True;";
+                    if (System.IO.File.Exists(destFileName))
+                    {
+                        System.IO.File.Delete(destFileName);
+                        System.IO.File.Copy(fileName, destFileName);
+                    }
+                    else
+                    {
+                        System.IO.File.Copy(fileName, destFileName);
+                    }
 
-                SqlCommand myInsert = new SqlCommand();
-                myInsert.Connection = myDbConnection;
-                myInsert.CommandText = "UPDATE tProfesori SET pic_URL = '" + destFileName.ToString() + "' WHERE ID = " + idProf;
+                    SqlCommand myInsert = new SqlCommand();
+                    myInsert.Connection = sqlConn;
+                    myInsert.CommandText = "UPDATE tProfesori SET pic_URL = '" + picStringDB + "' WHERE ID = " + idProf;
 
-                try
-                {
-                    myDbConnection.Open();
-                    myInsert.ExecuteNonQuery();
-                    myDbConnection.Close();
-                    MessageBox.Show("Poza a fost salvata!");
-
-                    DataDisplay dataDisplayForm = new DataDisplay();
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message);
+                    try
+                    {
+                        sqlConn.Open();
+                        myInsert.ExecuteNonQuery();
+                        sqlConn.Close();
+                        MessageBox.Show("Poza a fost salvata!");
+                        DataDisplay dataDisplayForm = new DataDisplay();
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
             }
-            
+        }
+
+        private void txtBoxFilter_TextChanged(object sender, EventArgs e)
+        {
+            dt.DefaultView.RowFilter = string.Format("[rowStr] LIKE '%{0}%'", txtBoxFilter.Text);
+        }
+
+        private void txtBoxFilter_Click(object sender, EventArgs e)
+        {
+            if (txtBoxFilter.Text == "...")
+            {
+                txtBoxFilter.Text = "";
+            }
+        }
+
+        private void txtBoxEleviFilter_TextChanged(object sender, EventArgs e)
+        {
+            dtElevi.DefaultView.RowFilter = string.Format("[rowStr] LIKE '%{0}%'", txtBoxEleviFilter.Text);
+        }
+
+        private void txtBoxEleviFilter_Click(object sender, EventArgs e)
+        {
+            if (txtBoxEleviFilter.Text == "...")
+            {
+                txtBoxEleviFilter.Text = "";
+            }
+        }
+
+        private void btnSelectPicElev_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdElevPic = new OpenFileDialog();
+            ofdElevPic.Title = "Selectati poza";
+            ofdElevPic.InitialDirectory = @"C:\";
+            ofdElevPic.Filter = "Image Files|*.jpg;*.jpeg;*.png;";
+            ofdElevPic.Multiselect = false;
+            if (ofdElevPic.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = ofdElevPic.FileName;
+                FileInfo fi = new FileInfo(filePath);
+                string extn = fi.Extension;
+                fileExt = extn;
+                sourceFile = filePath;
+                picBoxElev = default;
+                if (idElev == 0)
+                {
+                    MessageBox.Show("Nu ati selectat elevul!");
+                }
+                if (sourceFile == string.Empty)
+                {
+                    MessageBox.Show("Nu ati selectat poza!");
+                }
+                else
+                {
+                    string fileName = sourceFile.ToString();
+                    string destFileName = Path.Combine(picFolderPath + "\\Elevi\\" + "ID_" + idElev + "_" + numeElev + prenumeElev + fileExt);
+                    string dbEntry = "\\Elevi\\" + "ID_" + idElev + "_" + numeElev + prenumeElev + fileExt;
+
+                    if (System.IO.File.Exists(destFileName))
+                    {
+                        System.IO.File.Delete(destFileName);
+                        System.IO.File.Copy(fileName, destFileName);
+                    }
+                    else
+                    {
+                        System.IO.File.Copy(fileName, destFileName);
+                    }
+
+                    SqlCommand myInsert = new SqlCommand();
+                    myInsert.Connection = sqlConn;
+                    myInsert.CommandText = "UPDATE tElevi SET pic_URL = '" + dbEntry.ToString() + "' WHERE ID = " + idElev;
+
+                    try
+                    {
+                        sqlConn.Open();
+                        myInsert.ExecuteNonQuery();
+                        sqlConn.Close();
+                        MessageBox.Show("Poza a fost salvata!");
+                        DataDisplay dataDisplayForm = new DataDisplay();
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void btnSterge_Click(object sender, EventArgs e)
+        {
+            int currentTabPage;
+            currentTabPage = tabDataView.SelectedIndex;
+
+            if (currentTabPage == 0)
+            {
+                DialogResult dlgRes;
+                dlgRes = MessageBox.Show("Sigur doriți să ștergeți datele?\r\nAceastă acțiune este ireversibilă.\r\nInformațiile vor fi șterse definitiv!", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dlgRes == DialogResult.Yes)
+                {
+                    SqlCommand dbDelete = new SqlCommand();
+                    dbDelete.Connection = sqlConn;
+                    dbDelete.CommandText = "DELETE FROM tProfesori WHERE ID=" + idProf;
+
+                    try
+                    {
+                        sqlConn.Open();
+                        dbDelete.ExecuteNonQuery();
+                        sqlConn.Close();
+                        MessageBox.Show("Datele au fost sterse!");
+                        DataDisplay dataDisplayForm = new DataDisplay();
+                        memoRowID = 0;
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                else
+                {
+                    this.Show();
+                }
+            }
+            if (currentTabPage == 1)
+            {
+                DialogResult dlgRes;
+                dlgRes = MessageBox.Show("Sigur doriți să ștergeți datele?\r\nAceastă acțiune este ireversibilă.\r\nInformațiile vor fi șterse definitiv!", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dlgRes == DialogResult.Yes)
+                {
+                    SqlCommand dbDelete = new SqlCommand();
+                    dbDelete.Connection = sqlConn;
+                    dbDelete.CommandText = "DELETE FROM tElevi WHERE ID=" + idElev;
+
+                    try
+                    {
+                        sqlConn.Open();
+                        dbDelete.ExecuteNonQuery();
+                        sqlConn.Close();
+                        MessageBox.Show("Datele au fost sterse!");
+                        DataDisplay dataDisplayForm = new DataDisplay();
+                        memoRowID = 0;
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                else
+                {
+                    this.Show();
+                }
+            }
+            if (currentTabPage == 2)
+            {
+                DialogResult dlgRes;
+                dlgRes = MessageBox.Show("Sigur doriți să ștergeți datele?\r\nAceastă acțiune este ireversibilă.\r\nInformațiile vor fi șterse definitiv!", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dlgRes == DialogResult.Yes)
+                {
+                    SqlCommand dbDelete = new SqlCommand();
+                    dbDelete.Connection = sqlConn;
+                    dbDelete.CommandText = "DELETE FROM tMaterii WHERE ID=" + idMaterie;
+
+                    try
+                    {
+                        sqlConn.Open();
+                        dbDelete.ExecuteNonQuery();
+                        sqlConn.Close();
+                        MessageBox.Show("Materia a fost stearsa");
+                        DataDisplay dataDisplayForm = new DataDisplay();
+                        memoRowID = 0;
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                else
+                {
+                    this.Show();
+                }
+            }
+            if (currentTabPage == 3)
+            {
+                DialogResult dlgRes;
+                dlgRes = MessageBox.Show("Sigur doriți să ștergeți datele?\r\nAceastă acțiune este ireversibilă.\r\nInformațiile vor fi șterse definitiv!", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dlgRes == DialogResult.Yes)
+                {
+                    SqlCommand dbDelete = new SqlCommand();
+                    dbDelete.Connection = sqlConn;
+                    dbDelete.CommandText = "DELETE FROM tNote WHERE ID=" + idNota;
+
+                    try
+                    {
+                        sqlConn.Open();
+                        dbDelete.ExecuteNonQuery();
+                        sqlConn.Close();
+                        MessageBox.Show("Nota a fost steards!");
+                        DataDisplay dataDisplayForm = new DataDisplay();
+                        memoRowID = 0;
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                else
+                {
+                    this.Show();
+                }
+            }
+        }
+
+        private void textMateriiFilter_TextChanged(object sender, EventArgs e)
+        {
+            dtMaterii.DefaultView.RowFilter = string.Format("[rowStr] LIKE '%{0}%'", textMateriiFilter.Text);
+        }
+
+        private void textMateriiFilter_Click(object sender, EventArgs e)
+        {
+            if (textMateriiFilter.Text == "...")
+            {
+                textMateriiFilter.Text = "";
+            }
+        }
+
+        private void textBoxNoteFilter_TextChanged(object sender, EventArgs e)
+        {
+            dtNote.DefaultView.RowFilter = string.Format("[rowStr] LIKE '%{0}%'", textBoxNoteFilter.Text);
+        }
+
+        private void textBoxNoteFilter_Click(object sender, EventArgs e)
+        {
+            if (textBoxNoteFilter.Text == "...")
+            {
+                textBoxNoteFilter.Text = "";
+            }
         }
     }
 }
