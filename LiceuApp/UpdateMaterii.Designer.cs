@@ -34,28 +34,35 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // lblMateriiUpdate
             // 
             this.lblMateriiUpdate.AutoSize = true;
-            this.lblMateriiUpdate.Location = new System.Drawing.Point(48, 111);
+            this.lblMateriiUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMateriiUpdate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(176)))), ((int)(((byte)(50)))));
+            this.lblMateriiUpdate.Location = new System.Drawing.Point(31, 131);
             this.lblMateriiUpdate.Name = "lblMateriiUpdate";
-            this.lblMateriiUpdate.Size = new System.Drawing.Size(42, 13);
+            this.lblMateriiUpdate.Size = new System.Drawing.Size(55, 16);
             this.lblMateriiUpdate.TabIndex = 0;
-            this.lblMateriiUpdate.Text = "Materie";
+            this.lblMateriiUpdate.Text = "Materie:";
             // 
             // txtBoxMateriiUpdate
             // 
-            this.txtBoxMateriiUpdate.Location = new System.Drawing.Point(96, 108);
+            this.txtBoxMateriiUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(49)))), ((int)(((byte)(60)))));
+            this.txtBoxMateriiUpdate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBoxMateriiUpdate.Location = new System.Drawing.Point(89, 130);
             this.txtBoxMateriiUpdate.Name = "txtBoxMateriiUpdate";
-            this.txtBoxMateriiUpdate.Size = new System.Drawing.Size(157, 20);
+            this.txtBoxMateriiUpdate.Size = new System.Drawing.Size(218, 20);
             this.txtBoxMateriiUpdate.TabIndex = 1;
             // 
             // lblWarning
             // 
             this.lblWarning.AutoSize = true;
-            this.lblWarning.Location = new System.Drawing.Point(30, 34);
+            this.lblWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWarning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(176)))), ((int)(((byte)(50)))));
+            this.lblWarning.Location = new System.Drawing.Point(7, 58);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Size = new System.Drawing.Size(324, 39);
             this.lblWarning.TabIndex = 2;
@@ -64,48 +71,68 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(277, 351);
+            this.btnExit.BackColor = System.Drawing.Color.Red;
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.ForeColor = System.Drawing.Color.White;
+            this.btnExit.Location = new System.Drawing.Point(318, 1);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(75, 23);
+            this.btnExit.Size = new System.Drawing.Size(25, 25);
             this.btnExit.TabIndex = 18;
-            this.btnExit.Text = "Ieșire";
-            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Text = "X";
+            this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(197, 351);
+            this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(161)))), ((int)(((byte)(0)))));
+            this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBack.ForeColor = System.Drawing.Color.White;
+            this.btnBack.Location = new System.Drawing.Point(1, 1);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(75, 23);
+            this.btnBack.Size = new System.Drawing.Size(25, 25);
             this.btnBack.TabIndex = 17;
-            this.btnBack.Text = " Înapoi";
-            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Text = "<";
+            this.btnBack.UseVisualStyleBackColor = false;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(259, 106);
+            this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(176)))), ((int)(((byte)(50)))));
+            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSave.ForeColor = System.Drawing.Color.White;
+            this.btnSave.Location = new System.Drawing.Point(232, 156);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 16;
             this.btnSave.Text = "Salvează";
-            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(176)))), ((int)(((byte)(50)))));
+            this.panel1.Location = new System.Drawing.Point(27, 1);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(290, 25);
+            this.panel1.TabIndex = 19;
             // 
             // updateMaterii
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 391);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(19)))), ((int)(((byte)(30)))), ((int)(((byte)(40)))));
+            this.ClientSize = new System.Drawing.Size(343, 224);
             this.ControlBox = false;
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblWarning);
             this.Controls.Add(this.txtBoxMateriiUpdate);
             this.Controls.Add(this.lblMateriiUpdate);
-            this.MaximumSize = new System.Drawing.Size(380, 430);
-            this.MinimumSize = new System.Drawing.Size(380, 430);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "updateMaterii";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Actualizare materii";
@@ -123,5 +150,6 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Panel panel1;
     }
 }
